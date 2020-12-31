@@ -41,42 +41,80 @@ Route::prefix('admin')->group(function () {
     Route::get('/news', 'NewsController@index');
     Route::get('/admin', 'AdminController@index');
     Route::get('/menu', 'MenuController@index');
+    Route::get('/submenu', 'SubMenuController@index');
+
 
     //post
     Route::post('/title', 'TitleController@store');
     Route::post('/ad', 'AdController@store');
     Route::post('/image', 'ImageController@store');
     Route::post('/mvim', 'MvimController@store');
+    Route::post('/total', 'TotalController@store');
+    Route::post('/bottom', 'BottomController@store');
     Route::post('/news', 'NewsController@store');
     Route::post('/admin', 'AdminController@store');
     Route::post('/menu', 'MenuController@store');
+    Route::post('/submenu', 'SubMenuController@store');
+
 
     //update
     Route::patch('/title/{id}', 'TitleController@update');
     Route::patch('/ad/{id}', 'AdController@update');
-
+    Route::patch('/image/{id}', 'ImageController@update');
+    Route::patch('/mvim/{id}', 'MvimController@update');
+    Route::patch('/total/{id}', 'TotalController@update');
+    Route::patch('/bottom/{id}', 'BottomController@update');
+    Route::patch('/news/{id}', 'NewsController@update');
+    Route::patch('/admin/{id}', 'AdminController@update');
+    Route::patch('/menu/{id}', 'MenuController@update');
+    Route::patch('/submenu/{id}', 'SubMenuController@update');    
 
     //delete
     Route::delete('/title/{id}', 'TitleController@destroy');
     Route::delete('/ad/{id}', 'AdController@destroy');
+    Route::delete('/image/{id}', 'ImageController@destroy');
+    Route::delete('/mvim/{id}', 'MvimController@destroy');
+    Route::delete('/news/{id}', 'NewsController@destroy');
+    Route::delete('/admin/{id}', 'AdminController@destroy');
+    Route::delete('/menu/{id}', 'MenuController@destroy');
+    Route::delete('/submenu/{id}', 'SubMenuController@destroy');    
 
 
     //show
     Route::patch('/title/sh/{id}', 'TitleController@display');
     Route::patch('/ad/sh/{id}', 'AdController@display');
-
+    Route::patch('/image/sh/{id}', 'ImageController@display');
+    Route::patch('/mvim/sh/{id}', 'MvimController@display');
+    Route::patch('/news/sh/{id}', 'NewsController@display');
+    Route::patch('/menu/sh/{id}', 'MenuController@display');
 
 });
-//modals
 
-Route::get('/modals/addTitle', 'TitleController@create');
-Route::get('/modals/addAd', 'AdController@create');
+Route::prefix('modals')->group(function () {
 
-//edit
-Route::get('/modals/title/{id}', 'TitleController@edit');
-Route::get('/modals/ad/{id}', 'AdController@edit');
+    //modals
+    Route::get('/addTitle', 'TitleController@create');
+    Route::get('/addAd', 'AdController@create');
+    Route::get('/addImage', 'ImageController@create');
+    Route::get('/addMvim', 'MvimController@create');
+    Route::get('/addNews', 'NewsController@create');
+    Route::get('/addAdmin', 'AdminController@create');
+    Route::get('/addMenu', 'MenuController@create');
+    Route::get('/addSubMenu', 'SubMenuController@create');
 
+    //edit
+    Route::get('/title/{id}', 'TitleController@edit');
+    Route::get('/ad/{id}', 'AdController@edit');
+    Route::get('/image/{id}', 'ImageController@edit');
+    Route::get('/mvim/{id}', 'MvimController@edit');
+    Route::get('/total/{id}', 'TotalController@edit');
+    Route::get('/bottom/{id}', 'BottomController@edit');
+    Route::get('/news/{id}', 'NewsController@edit');
+    Route::get('/admin/{id}', 'AdminController@edit');
+    Route::get('/menu/{id}', 'MenuController@edit');
+    Route::get('/subMenu/{id}', 'SubMenuController@edit');    
 
+});
 
 
 

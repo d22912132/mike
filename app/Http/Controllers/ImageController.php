@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Image;
+
 
 class ImageController extends Controller
 {
@@ -13,7 +15,54 @@ class ImageController extends Controller
      */
     public function index()
     {
-        return view('backend.module', ['header'=>'校園映像片管理', 'module'=>'Image']);
+        $all=Image::all();
+        $cols=['校園映像圖片','顯示','刪除','操作'];
+        $rows=[];
+        foreach($all as $a){
+            $tmp=[
+                [
+                    'tag'=>'img',
+                    'src'=>$a->img,
+                    'style'=>'width:100px;height:68px'
+                ],
+                [
+                    'tag'=>'button',
+                    'type'=>'button',
+                    'btn_color'=>'btn-success',
+                    'action'=>'show',
+                    'id'=>$a->id,
+                    'text'=>($a->sh==1)?'顯示':'隱藏',
+                ],
+                [
+                    'tag'=>'button',
+                    'type'=>'button',
+                    'btn_color'=>'btn-danger',
+                    'action'=>'delete',
+                    'id'=>$a->id,
+                    'text'=>'刪除',
+                ],
+                [
+                    'tag'=>'button',
+                    'type'=>'button',
+                    'btn_color'=>'btn-info',
+                    'action'=>'edit',
+                    'id'=>$a->id,
+                    'text'=>'編輯',
+                ],
+            ];
+            
+            $rows[]=$tmp;
+        }
+
+        //dd($rows);
+
+        $view=[
+            'header'=>'校園映像圖片管理',
+            'module'=>'Image',
+            'cols'=>$cols,
+            'rows'=>$rows
+        ];
+        return view('backend.module', $view);
     }
 
     /**
@@ -23,7 +72,19 @@ class ImageController extends Controller
      */
     public function create()
     {
-        //
+        $view = [
+            'action'=>'/admin/image',
+            'modal_header'=>'新增校園映像圖片',
+            'modal_body'=>[
+                [
+                    'label'=>'校園映像圖片',
+                    'tag'=>'input',
+                    'type'=>'file',
+                    'name'=>'img'
+                ],
+            ],
+        ];
+        return view('modals.base_modal',$view);
     }
 
     /**
@@ -34,7 +95,18 @@ class ImageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //儲存圖片檔案時，檔名拉出來優先做處理
+        //確認陣列$request請求中是否存在文件，除了檢查文件是否存在之外，還可以驗證通過以下isValid方法上傳文件沒有問題：
+        if($request->hasFile('img') && $request->file('img')->isValid()){
+            $image=new Image;
+            //如果想獲取上傳文件的原始名稱，可以使用以下getClientOriginalName方法：(存放資料為public)
+            $request->file('img')->storeAs('public',$request->file('img')->getClientOriginalName());
+
+            $image->img=$request->file('img')->getClientOriginalName();
+            $image->save(); 
+        }
+
+        return redirect('/admin/image');
     }
 
     /**
@@ -57,6 +129,29 @@ class ImageController extends Controller
     public function edit($id)
     {
         //
+        $image=Image::find($id); 
+        $view = [
+            'action'=>'/admin/image/'.$id,
+            // 讓瀏覽器知道我們用的方法是patch不是post
+            'method'=>'patch',
+            'modal_header'=>'編輯校園映像圖片',
+            'modal_body'=>[
+                [
+                    'label'=>'目前圖片',
+                    'tag'=>'img',
+                    'src'=>$image->img,
+                    'style'=>'width:100px;height:68px',
+                ],
+                [
+                    'label'=>'更換校園映像圖片',
+                    'tag'=>'input',
+                    'type'=>'file',
+                    'name'=>'img'
+                ],
+            ],
+        ];
+
+        return view('modals.base_modal',$view);
     }
 
     /**
@@ -69,8 +164,29 @@ class ImageController extends Controller
     public function update(Request $request, $id)
     {
         //
+
+        $image=Image::find($id);
+
+        if($request->hasFile('img') && $request->file('img')->isValid()){
+            //如果想獲取上傳文件的原始名稱，可以使用以下getClientOriginalName方法：(存放資料為public)
+            $request->file('img')->storeAs('public',$request->file('img')->getClientOriginalName());
+            $image->img=$request->file('img')->getClientOriginalName();  
+            $image->save(); 
+        }
+
+        
+        return redirect('/admin/image');
     }
 
+    /**
+     *改變資料的顯示狀態
+     */
+    public function display($id)
+    {
+        $image=Image::find($id);
+        $image->sh=($image->sh+1)%2;
+        $image->save();  
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -80,5 +196,6 @@ class ImageController extends Controller
     public function destroy($id)
     {
         //
+        Image::destroy($id);
     }
 }

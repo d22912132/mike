@@ -4,10 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Total extends Model
+class SubMenu extends Model
 {
     //
     protected $fillable=[
-        'total'
+        'text',
+        'href',
+        'menu_id',
     ];
 }

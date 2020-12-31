@@ -4,10 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Total extends Model
+class Admin extends Model
 {
     //
     protected $fillable=[
-        'total'
+        'acc',
+        'pw'
     ];
 }

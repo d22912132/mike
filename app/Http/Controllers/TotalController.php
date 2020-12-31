@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Total;
+
 
 class TotalController extends Controller
 {
@@ -11,10 +13,40 @@ class TotalController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        return view('backend.module', ['header'=>'進站人數管理', 'module'=>'Total']);
+        $total=Total::first();
+        $cols=['進站總人數'];
+        $rows=[
+            [
+                'text'=>$total->total
+            ],
+            [
+                'tag'=>'button',
+                'type'=>'button',
+                'btn_color'=>'btn-info',
+                'action'=>'edit',
+                'id'=>$total->id,
+                'text'=>'編輯',
+            ],
+        ];
+
+        //dd($rows);
+
+        $view=[
+            'header'=>'進站總人數管理',
+            'module'=>'Total',
+            'cols'=>$cols,
+            'rows'=>$rows
+        ];
+        return view('backend.module', $view);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -57,6 +89,24 @@ class TotalController extends Controller
     public function edit($id)
     {
         //
+        $total=Total::first(); 
+        $view = [
+            'action'=>'/admin/total/'.$id,
+            // 讓瀏覽器知道我們用的方法是patch不是post
+            'method'=>'patch',
+            'modal_header'=>'編輯進站總人數',
+            'modal_body'=>[
+                [
+                    'label'=>'進站總人數',
+                    'tag'=>'input',
+                    'type'=>'number',
+                    'name'=>'total',
+                     'value'=>$total->total
+                ],
+            ],
+        ];
+
+        return view('modals.base_modal',$view);
     }
 
     /**
@@ -69,8 +119,17 @@ class TotalController extends Controller
     public function update(Request $request, $id)
     {
         //
-    }
 
+        $total=Total::first();
+
+        if($total->total!=$request->input('total')){
+            $total->total=$request->input('total');
+            $total->save(); 
+        }
+
+        
+        return redirect('/admin/total');
+    }
     /**
      * Remove the specified resource from storage.
      *

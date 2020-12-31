@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBottomsTable extends Migration
+class CreateNewsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateBottomsTable extends Migration
      */
     public function up()
     {
-        Schema::create('bottoms', function (Blueprint $table) {
+        Schema::create('news', function (Blueprint $table) {
             $table->id();
-            $table->string('bottom',64);
+            $table->text('text',64);
+            $table->boolean('sh')->default(1);
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ class CreateBottomsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bottoms');
+        Schema::dropIfExists('news');
     }
 }

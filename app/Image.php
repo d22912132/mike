@@ -4,10 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Total extends Model
+class Image extends Model
 {
     //
     protected $fillable=[
-        'total'
+        'img',
+        'sh',
     ];
 }

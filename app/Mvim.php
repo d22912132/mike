@@ -4,10 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Total extends Model
+class Mvim extends Model
 {
     //
     protected $fillable=[
-        'total'
+        'img',
+        'sh',
     ];
 }
