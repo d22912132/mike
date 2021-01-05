@@ -12,4 +12,8 @@ class Menu extends Model
         'href',
         'sh',
     ];
+
+    public function subs(){
+        return $this->hasMany("App\SubMenu");
+    }
 }

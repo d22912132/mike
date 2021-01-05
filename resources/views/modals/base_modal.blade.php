@@ -23,16 +23,18 @@
                   <td>
                     @switch($row['tag'])
                         @case('input')
-                            @include("layouts.input",$row)
-                            @break
+                          @include("layouts.input",$row)
+                        @break
                         @case('textarea')
-                            
-                            @break
+                          @include("layouts.textarea",$row)
+                        @break
+                        @case('embed')
+                          @include("layouts.embed",$row)
+                        @break
                         @case('img')
-                            @include("layouts.image",$row)
-                        
+                          @include("layouts.image",$row)
                         @default
-                            
+                        {!! nl2br($row['text']) !!}
                     @endswitch
 
                   </td>

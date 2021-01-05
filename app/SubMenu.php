@@ -12,4 +12,8 @@ class SubMenu extends Model
         'href',
         'menu_id',
     ];
+
+    public function menu(){
+        return $this->belongsTo("App\Menu");
+    }
 }

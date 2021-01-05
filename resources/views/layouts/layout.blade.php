@@ -12,7 +12,7 @@
 <body>
     <div class="container">
         <div class="header w-100">
-            <img src="{{asset('img/management.jpg')}}" alt="" class="w-100" style="height: 60px">
+            <img src="{{asset('storage/'.$title->img)}}" alt="{{ $title->text }}" class="w-100" style="height: 60px">
         </div>
         {{-- 橫向 --}}
         <div class="main d-flex" style="height: 568px">
@@ -20,7 +20,7 @@
         </div>
         <div class="footer w-100">
             <div class="text-center" style="height: 100px;line-height:100px; 
-            background:rgba(0, 255, 213, 0.877)">頁尾版權</div>
+            background:rgba(0, 255, 213, 0.877)">{{$bottom}}</div>
         </div>
     </div>
 <div id="modal"></div>

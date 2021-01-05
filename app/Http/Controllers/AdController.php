@@ -45,14 +45,11 @@ class AdController extends Controller
         }
 
         //dd($rows);
-
-        $view=[
-            'header'=>'動態廣告文字廣告',
-            'module'=>'Ad',
-            'cols'=>$cols,
-            'rows'=>$rows
-        ];
-        return view('backend.module', $view);
+        $this->view['header']='動態廣告文字廣告';
+        $this->view['module']='Ad';
+        $this->view['cols']= $cols;
+        $this->view['rows']= $rows;
+        return view('backend.module', $this->view);
     }
 
     /**

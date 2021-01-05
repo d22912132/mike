@@ -10,6 +10,8 @@ use App\Http\Controllers\BottomController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\SubMenuController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,6 +31,7 @@ use App\Http\Controllers\MenuController;
 //     return "Hi~";
 // });
 Route::view('/', 'home');
+Route::view('/ccc', 'ccc');
 Route::redirect('/admin', '/admin/title');
 Route::prefix('admin')->group(function () {
     //get
@@ -41,7 +44,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/news', 'NewsController@index');
     Route::get('/admin', 'AdminController@index');
     Route::get('/menu', 'MenuController@index');
-    Route::get('/submenu', 'SubMenuController@index');
+    Route::get('/submenu/{menu_id}', 'SubMenuController@index');
 
 
     //post
@@ -54,7 +57,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/news', 'NewsController@store');
     Route::post('/admin', 'AdminController@store');
     Route::post('/menu', 'MenuController@store');
-    Route::post('/submenu', 'SubMenuController@store');
+    Route::post('/submenu/{menu_id}', 'SubMenuController@store');
 
 
     //update
@@ -100,7 +103,7 @@ Route::prefix('modals')->group(function () {
     Route::get('/addNews', 'NewsController@create');
     Route::get('/addAdmin', 'AdminController@create');
     Route::get('/addMenu', 'MenuController@create');
-    Route::get('/addSubMenu', 'SubMenuController@create');
+    Route::get('/addSubMenu/{menu_id}', 'SubMenuController@create');
 
     //edit
     Route::get('/title/{id}', 'TitleController@edit');
@@ -112,7 +115,7 @@ Route::prefix('modals')->group(function () {
     Route::get('/news/{id}', 'NewsController@edit');
     Route::get('/admin/{id}', 'AdminController@edit');
     Route::get('/menu/{id}', 'MenuController@edit');
-    Route::get('/subMenu/{id}', 'SubMenuController@edit');    
+    Route::get('/submenu/{id}', 'SubMenuController@edit');    
 
 });
 

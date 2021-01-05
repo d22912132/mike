@@ -1,15 +1,19 @@
 @extends('layouts.layout')
 
 @section('main')
-@include('layouts.backend_sidebar')
+@include('layouts.backend_sidebar',['total'=>$total])
 <div class="main col-9 p-0 d-flex flex-wrap align-items-start">
         <div class="col-8 border py-3 text-center">後臺管理區</div>
         <button class="col-4 btn btn-light border py-3 text-center">管理登出</button>
         <div class="border w-100 p-1" style="height: 500px;overflow:auto">
-        <h5 class="text-center borter-bottom py-3">
+        <h5 class="text-center border-bottom py-3">
         @if ($module != 'Total' && $module != 'Bottom')
         <button class="btnbtn-sm btn-primary float-left" id="addRow">新增</button>    
         @endif
+
+        @isset($menu_id)
+            <input type="hidden" name="menu_id" value="{{$menu_id}}">
+        @endisset
         {{ $header }}
         </h5>
         <table class="table border-none text-center">
@@ -35,8 +39,14 @@
                                 @case('button')
                                     @include('layouts.button',$item)
                                 @break
+                                @case('embed')
+                                    @include('layouts.embed',$item)
+                                @break
+                                @case('textarea')
+                                    @include('layouts.textarea',$item)
+                                @break
                                 @default
-                                    {{ $item['text'] }}
+                                    {!! nl2br($item['text']) !!}
                             @endswitch
                         </td>
                     @endforeach
@@ -66,15 +76,27 @@
         }
     });
     $('#addRow').on("click", function(){
-        $.get("/modals/add{{ $module }}", function(modal){
-            $("#modal").html(modal)
-            $("#baseModal").modal("show")
 
-            $("#baseModal").on("hidden.bs.modal",function(){
-                $("#baseModal").modal("dispose")
-                $("#modal").html("")
+        @isset($menu_id)
+            $.get("/modals/add{{ $module }}/{{$menu_id}}", function(modal){
+                $("#modal").html(modal)
+                $("#baseModal").modal("show")
+
+                $("#baseModal").on("hidden.bs.modal",function(){
+                    $("#baseModal").modal("dispose")
+                    $("#modal").html("")
+                })
             })
-        })
+        @endisset
+            $.get("/modals/add{{ $module }}", function(modal){
+                $("#modal").html(modal)
+                $("#baseModal").modal("show")
+
+                $("#baseModal").on("hidden.bs.modal",function(){
+                    $("#baseModal").modal("dispose")
+                    $("#modal").html("")
+                })
+            })
     })
 
     $('.edit').on("click",function(){
@@ -93,27 +115,41 @@
 
 
     $('.delete').on("click",function(){
-        let id=$(this).data('id')
+        let id=$(this).data('id');
+        let _this=$(this);
         {{--  es6文字模板功能，使用反引號保留原始樣貌  --}}
         $.ajax({
             type:'delete',
             url:`/admin/{{ strtolower($module) }}/${id}`,
             success:function(){
-                location.reload()
+                _this.parents('tr').remove();
             }
         })
     })
 
     $('.show').on("click",function(){
-        let id=$(this).data('id')
+        let id=$(this).data('id');
+        let _this=$(this);
+
         {{--  es6文字模板功能，使用反引號保留原始樣貌  --}}
         $.ajax({
             type:'patch',
             url:`/admin/{{ strtolower($module) }}/sh/${id}`,
             success:function(){
-                location.reload()
+            
+            
+                if(_this.text()=="顯示"){
+                    _this.text('隱藏');
+                }else{
+                    _this.text('顯示');
+                }
             }
         })
+    })
+
+    $(".sub").on("click",function(){
+        let id=$(this).data("id");
+        location.href=`/admin/submenu/${id}`;
     })
 
 

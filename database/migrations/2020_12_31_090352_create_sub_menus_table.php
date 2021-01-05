@@ -17,7 +17,7 @@ class CreateSubMenusTable extends Migration
             $table->id();
             $table->string('text',32);
             $table->string('href',32);
-            $table->unsignedInteger("menus_id");
+            $table->unsignedInteger("menu_id");
             $table->timestamps();
         });
     }

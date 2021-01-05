@@ -3,35 +3,30 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Mvim;
+use App\SubMenu;
 
-
-class MvimController extends Controller
+class SubMenuController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($menu_id)
     {
-        $all=Mvim::all();
-        $cols=['動畫圖片','顯示','刪除','操作'];
+        //
+        $all=SubMenu::where("menu_id",$menu_id)->get();
+        $cols=['次選單名稱','次選單連結網址','刪除','操作',''];
         $rows=[];
         foreach($all as $a){
             $tmp=[
                 [
-                    'tag'=>'img',
-                    'src'=>$a->img,
-                    'style'=>'width:120px;height:80px'
+                    'tag'=>'',
+                    'text'=>$a->text
                 ],
                 [
-                    'tag'=>'button',
-                    'type'=>'button',
-                    'btn_color'=>'btn-success',
-                    'action'=>'show',
-                    'id'=>$a->id,
-                    'text'=>($a->sh==1)?'顯示':'隱藏',
+                    'tag'=>'',
+                    'text'=>$a->href
                 ],
                 [
                     'tag'=>'button',
@@ -56,10 +51,11 @@ class MvimController extends Controller
 
         //dd($rows);
 
-        $this->view['header']='動畫圖片管理';
-        $this->view['module']='Mvim';
+        $this->view['header']='最新消息內容管理';
+        $this->view['module']='News';
         $this->view['cols']= $cols;
         $this->view['rows']= $rows;
+        $this->view['menu_id']= $menu_id;
         //dd($this->view);
         return view('backend.module', $this->view);
     }
@@ -69,17 +65,24 @@ class MvimController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($menu_id)
     {
+        //
         $view = [
-            'action'=>'/admin/mvim',
-            'modal_header'=>'新增動畫圖片',
+            'action'=>'/admin/submenu/'.$menu_id,
+            'modal_header'=>'新增次主選單',
             'modal_body'=>[
                 [
-                    'label'=>'動畫圖片',
+                    'label'=>'次選單名稱',
                     'tag'=>'input',
-                    'type'=>'file',
-                    'name'=>'img'
+                    'type'=>'text',
+                    'name'=>'text'
+                ],
+                [
+                    'label'=>'次選單連結網址',
+                    'tag'=>'input',
+                    'type'=>'text',
+                    'name'=>'href'
                 ],
             ],
         ];
@@ -92,20 +95,17 @@ class MvimController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request,$menu_id)
     {
-        //儲存圖片檔案時，檔名拉出來優先做處理
-        //確認陣列$request請求中是否存在文件，除了檢查文件是否存在之外，還可以驗證通過以下isValid方法上傳文件沒有問題：
-        if($request->hasFile('img') && $request->file('img')->isValid()){
-            $mvim=new Mvim;
-            //如果想獲取上傳文件的原始名稱，可以使用以下getClientOriginalName方法：(存放資料為public)
-            $request->file('img')->storeAs('public',$request->file('img')->getClientOriginalName());
+        //
+        $sub=new SubMenu;
+        $sub->text=$request->input('text');
+        $sub->href=$request->input('href');
+        $sub->menu_id=$menu_id;
+        $sub->save(); 
+    
 
-            $mvim->img=$request->file('img')->getClientOriginalName();
-            $mvim->save(); 
-        }
-
-        return redirect('/admin/mvim');
+        return redirect('/admin/submenu/'.$menu_id);
     }
 
     /**
@@ -128,24 +128,26 @@ class MvimController extends Controller
     public function edit($id)
     {
         //
-        $mvim=Mvim::find($id); 
+        $sub=SubMenu::find($id); 
         $view = [
-            'action'=>'/admin/mvim/'.$id,
+            'action'=>'/admin/submenu/'.$id,
             // 讓瀏覽器知道我們用的方法是patch不是post
             'method'=>'patch',
-            'modal_header'=>'編輯網站標題資料',
+            'modal_header'=>'編輯次選單內容',
             'modal_body'=>[
                 [
-                    'label'=>'目前動畫圖片',
-                    'tag'=>'img',
-                    'src'=>$mvim->img,
-                    'style'=>'width:120px;height:80px',
+                    'label'=>'次選單名稱',
+                    'tag'=>'input',
+                    'type'=>'text',
+                    'name'=>'text',
+                    'value'=>$sub->text,
                 ],
                 [
-                    'label'=>'更換動畫圖片',
+                    'label'=>'次選單連結網址',
                     'tag'=>'input',
-                    'type'=>'file',
-                    'name'=>'img'
+                    'type'=>'text',
+                    'name'=>'href',
+                    'value'=>$sub->href,
                 ],
             ],
         ];
@@ -163,30 +165,20 @@ class MvimController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $sub=SubMenu::find($id);
 
-        $mvim=Mvim::find($id);
-
-        if($request->hasFile('img') && $request->file('img')->isValid()){
-            //如果想獲取上傳文件的原始名稱，可以使用以下getClientOriginalName方法：(存放資料為public)
-            $request->file('img')->storeAs('public',$request->file('img')->getClientOriginalName());
-            $mvim->img=$request->file('img')->getClientOriginalName();
-            $mvim->save();  
+        if($sub->text != $request->input('text')){
+            $sub->text = $request->input('text');    
+        }
+        if($sub->href!=$request->input('href')){
+            $sub->href=$request->input('href'); 
         }
 
- 
+        $sub->save();
         
-        return redirect('/admin/mvim');
+        return redirect('/admin/submenu/'.$sub->menu_id);
     }
 
-    /**
-     *改變資料的顯示狀態
-     */
-    public function display($id)
-    {
-        $mvim=Mvim::find($id);
-        $mvim->sh=($mvim->sh+1)%2;
-        $mvim->save();  
-    }
     /**
      * Remove the specified resource from storage.
      *
@@ -196,6 +188,6 @@ class MvimController extends Controller
     public function destroy($id)
     {
         //
-        Mvim::destroy($id);
+        SubMenu::destroy($id);
     }
 }
