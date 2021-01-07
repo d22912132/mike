@@ -206,15 +206,17 @@ class TitleController extends Controller
             $findDefault=Title::where("sh",0)->first();
             $findDefault->sh=1;
             $findDefault->save();
-
+            $img=$findDefault->img;
 
         }else{
             $title->sh=1;
             $findshow=Title::where("sh",1)->first();
             $findshow->sh=0;
             $findshow->save();
+            $img=$title->img;
         }
         $title->save();
+        return $img;
     }
     /**
      * Remove the specified resource from storage.

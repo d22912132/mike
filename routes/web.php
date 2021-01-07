@@ -11,6 +11,8 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SubMenuController;
+use App\Http\Controllers\HomeController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +32,10 @@ use App\Http\Controllers\SubMenuController;
 // Route::get('/', function () {
 //     return "Hi~";
 // });
-Route::view('/', 'home');
+Route::get('/','HomeController@index');
+Route::get('/news','NewsController@list');
+Route::get('/login','AdminController@showLoginForm');
+
 Route::view('/ccc', 'ccc');
 Route::redirect('/admin', '/admin/title');
 Route::prefix('admin')->group(function () {

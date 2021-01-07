@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Admin;
 
-class AdminController extends Controller
+class AdminController extends HomeController
 {
+    public function showLoginForm(){
+        parent::sideBar();
+        return view('login',$this->view);
+    }
     /**
      * Display a listing of the resource.
      *

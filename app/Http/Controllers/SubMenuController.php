@@ -51,8 +51,8 @@ class SubMenuController extends Controller
 
         //dd($rows);
 
-        $this->view['header']='最新消息內容管理';
-        $this->view['module']='News';
+        $this->view['header']='次選單內容管理';
+        $this->view['module']='SubMenu';
         $this->view['cols']= $cols;
         $this->view['rows']= $rows;
         $this->view['menu_id']= $menu_id;

@@ -6,8 +6,13 @@ use Illuminate\Http\Request;
 use App\News;
 
 
-class NewsController extends Controller
+class NewsController extends HomeController
 {
+    public function list(){
+        parent::sideBar();
+        return view('news',$this->view);
+    }
+    
     /**
      * Display a listing of the resource.
      *
