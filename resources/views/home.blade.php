@@ -1,6 +1,8 @@
+{{--  繼承layouts把上到下三層繼承過來  --}}
 @extends('layouts.layout')
 
 @section('main')
+{{--  切三塊分為左中右，左為menu  --}}
 <div class="menu col-3">
     <div class="text-center py-2 border-bottom my-1">主選單區</div>
     @isset($menus)
@@ -26,13 +28,21 @@
         進站總人數：{{ $total }}
     </div>
 </div>
+{{--  中間切版main  --}}
 <div class="main col-6">
     <marquee>{{$ads}}</marquee>
 
    @yield('center') 
 </div>
+{{--  右邊切版right  --}}
 <div class="right col-3">
-    <button class="btn btn-primary py-3 w-100">管理登入</button>
+    @auth
+    <a href="/admin" class="btn btn-success py-3 w-100 my-2">返回管理({{$user->acc}})</a>
+    @endauth
+    @guest
+    <a href="/login" class="btn btn-primary py-3 w-100 my-2">管理登入</a>
+    @endguest
+    
     <div class="text-center py-2 border-bottom my-1">主選單區</div>
     
     <div class="up"></div>

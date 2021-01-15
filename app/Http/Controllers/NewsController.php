@@ -1,15 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\News;
 
 
 class NewsController extends HomeController
 {
+
     public function list(){
         parent::sideBar();
+        $this->view['news']=News::where('sh',1)->paginate(5);
+        
         return view('news',$this->view);
     }
     
@@ -20,7 +22,7 @@ class NewsController extends HomeController
      */
     public function index()
     {
-        $all=News::all();
+        $all=News::paginate(4);
         $cols=['最新消息內容','顯示','刪除','操作'];
         $rows=[];
         foreach($all as $a){
@@ -64,6 +66,7 @@ class NewsController extends HomeController
         $this->view['module']='News';
         $this->view['cols']= $cols;
         $this->view['rows']= $rows;
+        $this->view['paginate']=$all->links();
         //dd($this->view);
         return view('backend.module', $this->view);
     }

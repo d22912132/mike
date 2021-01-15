@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Admin;
+use Hash;
 
 class AdminController extends HomeController
 {
@@ -11,6 +13,35 @@ class AdminController extends HomeController
         parent::sideBar();
         return view('login',$this->view);
     }
+
+    public function logout(){
+        Auth::logout();
+        return redirect('/login');
+    }
+
+    public function login(Request $res){
+    
+        $user=[
+            'acc'=>$res->input('acc'),
+            'password'=>$res->input('pw'),
+        ];
+
+        if(Auth::attempt($user)){
+            return redirect('/admin');
+        }else{
+            return redirect('/login')->with('error','帳號或密碼錯誤');
+        }
+    
+        // $acc=$res->input('acc');
+        // $pw=$res->input('pw');
+        // $chk=Admin::where('acc',$acc)->where('pw',$pw)->count();
+        // if($chk){
+        //     return redirect('/admin');
+        // }else{
+        //     return redirect('/login')->with('error','帳號或密碼錯誤');
+        // }
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -114,7 +145,7 @@ class AdminController extends HomeController
     {
         $admin=new Admin;
         $admin->acc=$request->input('acc');
-        $admin->pw=$request->input('pw');
+        $admin->pw=Hash::make($request->input('pw'));
         $admin->save(); 
 
         return redirect('/admin/admin');
@@ -179,7 +210,7 @@ class AdminController extends HomeController
         $admin=Admin::find($id);
 
         if($admin->pw!=$request->input('pw')){
-            $admin->pw=$request->input('pw');
+            $admin->pw=Hash::make($request->input('pw'));
             $admin->save(); 
         }
 

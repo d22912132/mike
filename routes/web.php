@@ -1,17 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TitleController;
-use App\Http\Controllers\AdController;
-use App\Http\Controllers\ImageController;
-use App\Http\Controllers\MvimController;
-use App\Http\Controllers\TotalController;
-use App\Http\Controllers\BottomController;
-use App\Http\Controllers\NewsController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\MenuController;
-use App\Http\Controllers\SubMenuController;
-use App\Http\Controllers\HomeController;
+// use App\Http\Controllers\TitleController;
+// use App\Http\Controllers\AdController;
+// use App\Http\Controllers\ImageController;
+// use App\Http\Controllers\MvimController;
+// use App\Http\Controllers\TotalController;
+// use App\Http\Controllers\BottomController;
+// use App\Http\Controllers\NewsController;
+// use App\Http\Controllers\AdminController;
+// use App\Http\Controllers\MenuController;
+// use App\Http\Controllers\SubMenuController;
+// use App\Http\Controllers\HomeController;
 
 
 /*
@@ -34,11 +34,15 @@ use App\Http\Controllers\HomeController;
 // });
 Route::get('/','HomeController@index');
 Route::get('/news','NewsController@list');
-Route::get('/login','AdminController@showLoginForm');
+Route::get('/login','AdminController@showLoginForm')->name('login');
+Route::post('/login','AdminController@login');
+Route::get('/logout','AdminController@logout');
+
+
 
 Route::view('/ccc', 'ccc');
 Route::redirect('/admin', '/admin/title');
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware('auth')->group(function () {
     //get
     Route::get('/title', 'TitleController@index');
     Route::get('/ad', 'AdController@index');

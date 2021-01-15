@@ -20,7 +20,16 @@ class Controller extends BaseController
     public function __construct()
     {
         $this->view['title']=Title::where("sh",1)->first();
+        //抓一次total值
         $this->view['total']=Total::first()->total;
+        if(!session()->has('visiter')){
+            $total=Total::first();
+            $total->total++;
+            $total->save();
+            $this->view['total']=$total->total;
+            //session(['visiter'=>$total->total]);
+            session()->put('visiter',$total->total);
+        }
         $this->view['bottom']=Bottom::first()->bottom;
     }
 }

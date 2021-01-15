@@ -17,7 +17,7 @@
         <ul class="list-group" style="position: relative">
             @foreach ($news as $key=>$new)
                 <li class="list-group-item list-group-item-action p-1 new" style="position: unset">
-                {{$key+1}}. {{ mb_substr($new->text,0,30,'utf8') }}...
+                {{$key+1}}. {{ mb_substr($new->text,0,20,'utf8') }}...
                 <div style="border:1px solid orange; box-shadow:1px 1px 5px #ccc;
                 background:yellow;width:75%;position:absolute;top:0;right:0;display:none;
                 white-spac:pre-wrap;font-size:87%;padding:10px;">

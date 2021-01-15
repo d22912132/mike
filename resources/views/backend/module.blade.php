@@ -4,11 +4,11 @@
 @include('layouts.backend_sidebar',['total'=>$total])
 <div class="main col-9 p-0 d-flex flex-wrap align-items-start">
         <div class="col-8 border py-3 text-center">後臺管理區</div>
-        <button class="col-4 btn btn-light border py-3 text-center">管理登出</button>
+        <a href="/logout" class="col-4 btn btn-light border py-3 text-center">管理登出</a>
         <div class="border w-100 p-1" style="height: 500px;overflow:auto">
         <h5 class="text-center border-bottom py-3">
         @if ($module != 'Total' && $module != 'Bottom')
-        <button class="btnbtn-sm btn-primary float-left" id="addRow">新增</button>    
+        <button class="btn btn-sm btn-primary float-left" id="addRow">新增</button>    
         @endif
 
         @isset($menu_id)
@@ -61,7 +61,14 @@
             @endif
         @endisset
         </table>
-    
+        @switch($module)
+            @case('Image')
+            @case('News')
+                {!! $paginate !!}
+                @break
+            @default
+                
+        @endswitch
         </div>
     </div>
 
@@ -82,6 +89,7 @@
                 $("#modal").html(modal)
                 $("#baseModal").modal("show")
 
+                //點擊新增跳出彈跳視窗當hidden.bs.modal隱藏時銷毀dispose
                 $("#baseModal").on("hidden.bs.modal",function(){
                     $("#baseModal").modal("dispose")
                     $("#modal").html("")

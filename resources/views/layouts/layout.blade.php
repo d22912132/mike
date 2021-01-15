@@ -6,18 +6,24 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    {{--  放下面才會蓋掉上面的，用asset抓正確的css/style.css位置  --}}
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <title>科技大學校園資訊系統</title>
 </head>
 <body>
+    {{--  大區塊包中間分成三塊  --}}
     <div class="container">
+        {{--  最上面那一塊叫header  --}}
         <div class="header w-100">
             <a href="/" title="{{$title->text }}"><img src="{{asset('storage/'.$title->img)}}" alt="{{ $title->text }}" class="w-100" style="height: 60px"></a>
         </div>
         {{-- 橫向 --}}
+        {{--  中間那一塊叫main，通常移出去另外做 d-flex使內容變橫向  --}}
         <div class="main d-flex" style="height: 568px">
             @yield('main')
         </div>
+        {{--  最下面那一塊footer  --}}
         <div class="footer w-100">
             <div class="text-center" style="height: 100px;line-height:100px; 
             background:rgba(229, 255, 0, 0.877)">{{$bottom}}</div>
