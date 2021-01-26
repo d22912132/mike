@@ -57,7 +57,7 @@ class AdminController extends HomeController
         foreach($all as $a){
             $i=0;
             $str='';
-            while ($i<strlen($a->pw)) {
+            while ($i<strlen($a->pw)/4) {
                 $str.='*';
                 $i++;
             }
